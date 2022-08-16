@@ -14,12 +14,19 @@ export class ItemDetailsComponent implements OnInit {
 
   @Input() viewMode = false;
 
-  @Input() currentItem: Item = {
+  @Input() 
+  
+  currentItem: Item = {
     name: '',
     categorie: '',
     amount: 1,
     price: '',
     bought: false
+  };
+
+  currentCategorie: Categorie = {
+    name: '',
+    description: ''
   };
 
   message = '';
@@ -30,13 +37,14 @@ export class ItemDetailsComponent implements OnInit {
     private itemService: ItemService,
     private categorieService: CategorieService,
     private route: ActivatedRoute,
-    private router: Router
+    // private router: Router
   ) { }
 
   ngOnInit(): void {
     if (!this.viewMode) {
       this.message = '';
       this.getItem(this.route.snapshot.params["id"]);
+      this.getCategorie(this.route.snapshot.params["name"])
     }
 
     this.categorieService.getAll().subscribe(
@@ -58,6 +66,17 @@ export class ItemDetailsComponent implements OnInit {
       });
   }
 
+  getCategorie(name: string): void {
+    this.categorieService.get(name)
+      .subscribe({
+        next: (data) => {
+          this.currentCategorie = data;
+          console.log(data);
+        },
+        error: (e) => console.error(e)
+      });
+  }
+  
   updateBought(status: boolean): void {
     const data = {
       name: this.currentItem.name,
@@ -75,6 +94,7 @@ export class ItemDetailsComponent implements OnInit {
           console.log(res);
           this.currentItem.bought = status;
           this.message = res.message ? res.message : 'The status was updated successfully!';
+          // this.router.navigate(['/items']);
         },
         error: (e) => console.error(e)
       });
@@ -89,7 +109,7 @@ export class ItemDetailsComponent implements OnInit {
         next: (res) => {
           console.log(res);
           this.message = res.message ? res.message : 'This Item was updated successfully!';
-          this.router.navigate(['/items']);
+          // this.router.navigate(['/items']);
         },
         error: (e) => console.error(e)
       });
@@ -103,7 +123,7 @@ export class ItemDetailsComponent implements OnInit {
         next: (res) => {
           console.log(res);
           this.message = res.message ? res.message : 'This Item was deleted successfully!';
-          this.router.navigate(['/items']);
+
         },
         error: (e) => console.error(e)
       });
