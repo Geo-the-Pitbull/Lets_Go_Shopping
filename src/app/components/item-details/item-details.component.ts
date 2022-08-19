@@ -14,14 +14,12 @@ export class ItemDetailsComponent implements OnInit {
 
   @Input() viewMode = false;
 
-  @Input() 
-  
-  currentItem: Item = {
-    name: '',
-    categorie: '',
-    amount: 1,
-    price: '',
-    bought: false
+  @Input() currentItem: Item = {
+            name: '',
+            categorie: '',
+            amount: 1,
+            price: '',
+            bought: false
   };
 
   currentCategorie: Categorie = {
